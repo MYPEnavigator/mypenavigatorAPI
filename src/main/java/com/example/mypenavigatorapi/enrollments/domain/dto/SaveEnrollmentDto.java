@@ -11,12 +11,4 @@ public class SaveEnrollmentDto {
     private Boolean isCompleted = false;
     private Integer progress = 0;
     private String certificateUrl = "";
-
-    @NotNull
-    @Positive
-    private Long userId;
-
-    @NotNull
-    @Positive
-    private Long courseId;
 }

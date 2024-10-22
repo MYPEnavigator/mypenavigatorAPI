@@ -49,9 +49,7 @@ public class BankService {
                 });
 
 
-        bank.setName(dto.getName());
-        bank.setAddress(dto.getAddress());
-        bank.setRuc(dto.getRuc());
+        Mapper.merge(dto, bank);
 
         return bankRepository.save(bank);
     }

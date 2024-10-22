@@ -18,19 +18,19 @@ public class UserModuleTracking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "is_completed")
+    @Column(name = "is_completed", columnDefinition = "boolean default false")
     private Boolean isCompleted;
 
     @Column(name = "is_started")
     private Boolean isStarted;
 
-    @Column(name = "is_blocked")
+    @Column(name = "is_blocked", columnDefinition = "boolean default false")
     private Boolean isBlocked;
 
-    @Column(name = "is_video_completed")
+    @Column(name = "is_video_completed", columnDefinition = "boolean default false")
     private Boolean isVideoCompleted;
 
-    @Column(name = "is_material_downloaded")
+    @Column(name = "is_material_downloaded", columnDefinition = "boolean default false")
     private Boolean isMaterialDownloaded;
 
     @Column(name = "test_score")

@@ -13,6 +13,7 @@ import com.example.mypenavigatorapi.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class EnrollmentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserModuleTrackingService userModuleTrackingService;
+
     public List<Enrollment> findAllByUserId(Long userId) {
         return enrollmentRepository.findByUserId(userId);
     }
@@ -35,25 +39,32 @@ public class EnrollmentService {
         return enrollmentRepository.findByCourseId(courseId);
     }
 
+    public Enrollment findByUserAndCourseId(Long userId, Long courseId) {
+        return enrollmentRepository.findByUserIdAndCourseId(userId, courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Enrollment", "userId and courseId", userId + " and " + courseId));
+    }
+
     public Enrollment findById(Long id) {
         return enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Enrollment", "id", id));
     }
 
-    public Enrollment enrollUser(SaveEnrollmentDto dto){
-        enrollmentRepository.findByUserIdAndCourseId(dto.getUserId(), dto.getCourseId())
+    @Transactional
+    public Enrollment enrollUser(SaveEnrollmentDto dto, Long userId, Long courseId){
+        enrollmentRepository.findByUserIdAndCourseId(userId, courseId)
                 .ifPresent(enrollment -> {
                     throw new BadRequestException("User is already enrolled in this course");
                 });
 
-        User user = userService.findById(dto.getUserId());
-        Course course = courseService.findById(dto.getCourseId());
+        User user = userService.findById(userId);
+        Course course = courseService.findById(courseId);
 
         Enrollment enrollment = Mapper.map(dto, Enrollment.class);
 
         enrollment.setUser(user);
         enrollment.setCourse(course);
 
+        userModuleTrackingService.startCourseTracking(userId, courseId);
         return enrollmentRepository.save(enrollment);
     }
 

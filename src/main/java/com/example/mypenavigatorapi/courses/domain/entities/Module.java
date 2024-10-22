@@ -21,13 +21,13 @@ public class Module extends AuditModel {
     private Integer order;
 
     @Column(name = "image_url")
-    private String image_url;
+    private String imageUrl;
 
     @Column(name = "material_url")
-    private String material_url;
+    private String materialUrl;
 
     @Column(name = "video_url")
-    private String video_url;
+    private String videoUrl;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

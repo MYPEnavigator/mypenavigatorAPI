@@ -26,6 +26,11 @@ public class MypeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Mype", "id", id));
     }
 
+    public Mype findByRuc(String ruc) {
+        return mypeRepository.findByRuc(ruc)
+                .orElseThrow(() -> new ResourceNotFoundException("Mype", "ruc", ruc));
+    }
+
     public Mype save(SaveMypeDto dto) {
         Mype mype = Mapper.map(dto, Mype.class);
 

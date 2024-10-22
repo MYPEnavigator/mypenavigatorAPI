@@ -5,6 +5,7 @@ import com.example.mypenavigatorapi.users.domain.dto.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,8 +21,8 @@ public class CourseDto {
     private String managerName;
     private String signatureUrl;
     private String level;
-    private List<String> syllabus;
+    private List<String> syllabus = new ArrayList<>();
     private BankDto bank;
     private UserDto user;
-    private List<ModuleDto> modules;
+    private List<ModuleWithoutTestDto> modules = new ArrayList<>();
 }

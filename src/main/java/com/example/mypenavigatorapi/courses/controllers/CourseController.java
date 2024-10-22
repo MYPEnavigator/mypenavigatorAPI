@@ -51,6 +51,12 @@ public class CourseController {
         return Mapper.map(courseService.findById(id), CourseDto.class);
     }
 
+    @GetMapping("/slug/{slug}")
+    @Operation(summary = "Get course by slug")
+    public CourseDto findBySlug(@PathVariable("slug") String slug) {
+        return Mapper.map(courseService.findBySlug(slug), CourseDto.class);
+    }
+
     @PostMapping
     @Operation(summary = "Create a new course")
     public CourseDto save(@Valid @RequestBody SaveCourseDto dto,

@@ -1,15 +1,15 @@
 package com.example.mypenavigatorapi.courses.domain.dto;
 
-import com.example.mypenavigatorapi.courses.domain.entities.Question;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-public class TestDto {
+public class ModuleWithoutTestDto {
     private Long id;
     private String title;
-    private List<QuestionDto> questions;
+    private String imageUrl;
+    private String materialUrl;
+    private String videoUrl;
+    private Integer order;
 }

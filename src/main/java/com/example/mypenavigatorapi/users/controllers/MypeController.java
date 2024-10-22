@@ -35,6 +35,12 @@ public class MypeController {
         return Mapper.map(mypeService.findById(id), MypeDto.class);
     }
 
+    @GetMapping("/ruc/{ruc}")
+    @Operation(summary = "Get mype by ruc")
+    public MypeDto findByRuc(@PathVariable("ruc") String ruc) {
+        return Mapper.map(mypeService.findByRuc(ruc), MypeDto.class);
+    }
+
     @PostMapping
     @Operation(summary = "Create a new mype")
     public MypeDto save(@Valid @RequestBody SaveMypeDto dto) {

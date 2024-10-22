@@ -6,6 +6,9 @@ import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.courses.domain.dto.SaveCourseDto;
 import com.example.mypenavigatorapi.courses.domain.entities.Course;
 import com.example.mypenavigatorapi.courses.domain.repositories.CourseRepository;
+import com.example.mypenavigatorapi.enrollments.domain.entities.Enrollment;
+import com.example.mypenavigatorapi.enrollments.domain.repositories.EnrollmentRepository;
+import com.example.mypenavigatorapi.enrollments.services.EnrollmentService;
 import com.example.mypenavigatorapi.users.domain.entities.Bank;
 import com.example.mypenavigatorapi.users.domain.entities.User;
 import com.example.mypenavigatorapi.users.services.BankService;
@@ -15,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -24,12 +28,19 @@ public class CourseService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
     public List<Course> findAll() {
         return courseRepository.findAll();
     }
 
     public List<Course> findAllByUserId(Long userId) {
-        return courseRepository.findAllByUserId(userId);
+        List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
+
+        return enrollments.stream()
+                .map(Enrollment::getCourse)
+                .collect(Collectors.toList());
     }
 
     public List<Course> findAllByBankId(Long bankId) {
@@ -39,6 +50,11 @@ public class CourseService {
     public Course findById(Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
+    }
+
+    public Course findBySlug(String slug) {
+        return courseRepository.findBySlug(slug)
+                .orElseThrow(() -> new ResourceNotFoundException("Course", "slug", slug));
     }
 
     public Course save(SaveCourseDto dto, Long userId){

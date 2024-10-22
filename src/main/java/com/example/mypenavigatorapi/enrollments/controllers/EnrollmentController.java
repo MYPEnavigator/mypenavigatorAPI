@@ -38,6 +38,13 @@ public class EnrollmentController {
                 .toList();
     }
 
+    @GetMapping("/user/{userId}/course/{courseId}")
+    @Operation(summary = "Get user enrollment in a course")
+    public EnrollmentDto findByUserAndCourseId(@PathVariable("userId") Long userId,
+                                              @PathVariable("courseId") Long courseId) {
+        return Mapper.map(enrollmentService.findByUserAndCourseId(userId, courseId), EnrollmentDto.class);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get enrollment by id")
     public EnrollmentDto findById(@PathVariable("id") Long id) {
@@ -46,8 +53,12 @@ public class EnrollmentController {
 
     @PostMapping
     @Operation(summary = "Enroll a user in a course")
-    public EnrollmentDto enrollUser(@Valid @RequestBody SaveEnrollmentDto dto){
-        return Mapper.map(enrollmentService.enrollUser(dto), EnrollmentDto.class);
+    public EnrollmentDto enrollUser(
+            @Valid @RequestBody SaveEnrollmentDto dto,
+            @RequestParam("userId") Long userId,
+            @RequestParam("courseId") Long courseId
+    ){
+        return Mapper.map(enrollmentService.enrollUser(dto, userId, courseId), EnrollmentDto.class);
     }
 
     @PatchMapping("/{id}")
