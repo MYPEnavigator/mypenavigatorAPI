@@ -29,6 +29,22 @@ public class CourseController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get all courses by user id")
+    public List<CourseDto> findAllByUserId(@PathVariable("userId") Long userId) {
+        return courseService.findAllByUserId(userId).stream()
+                .map(course -> Mapper.map(course, CourseDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/bank/{bankId}")
+    @Operation(summary = "Get all courses by bank id")
+    public List<CourseDto> findAllByBankId(@PathVariable("bankId") Long bankId) {
+        return courseService.findAllByBankId(bankId).stream()
+                .map(course -> Mapper.map(course, CourseDto.class))
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get course by id")
     public CourseDto findById(@PathVariable("id") Long id) {
@@ -38,8 +54,8 @@ public class CourseController {
     @PostMapping
     @Operation(summary = "Create a new course")
     public CourseDto save(@Valid @RequestBody SaveCourseDto dto,
-                          @RequestParam(value = "bankId", defaultValue = "0") Long bankId) {
-        return Mapper.map(courseService.save(dto, bankId), CourseDto.class);
+                          @RequestParam(value = "userId", defaultValue = "0") Long userId) {
+        return Mapper.map(courseService.save(dto, userId), CourseDto.class);
     }
 
     @PatchMapping("/{id}")

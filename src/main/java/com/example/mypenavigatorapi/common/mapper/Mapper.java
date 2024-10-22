@@ -1,5 +1,6 @@
 package com.example.mypenavigatorapi.common.mapper;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
@@ -16,6 +17,9 @@ public abstract class Mapper {
 
     public static <T, D> void merge(final T inputClass, D outClass){
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+
         modelMapper.map(inputClass, outClass);
     }
 }

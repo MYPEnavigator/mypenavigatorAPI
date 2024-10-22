@@ -15,8 +15,7 @@ public class SaveQuestionDto {
     private String questionText;
 
     @NotNull
-    @NotBlank
-    private String type;
+    private Boolean multiple;
 
     @NotNull
     private List<SaveAnswerDto> answers;

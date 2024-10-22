@@ -23,6 +23,7 @@ public class Bank extends AuditModel {
     @Column(name = "ruc", unique = true)
     private String ruc;
 
-    @Column(name = "logo_url")
+    @Lob
+    @Column(name = "logo_url", columnDefinition = "LONGTEXT")
     private String logoUrl;
 }

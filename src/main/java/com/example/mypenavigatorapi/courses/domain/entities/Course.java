@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -18,6 +20,9 @@ public class Course extends AuditModel {
 
     @Column(name = "title")
     private String title;
+
+    @Column(name = "slug")
+    private String slug;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -32,6 +37,20 @@ public class Course extends AuditModel {
     @Column(name = "reward_points")
     private Integer rewardPoints;
 
+    @Column(name = "manager_name")
+    private String managerName;
+
+    @Column(name = "signature_url")
+    private String signatureUrl;
+
+    @Column(name = "level")
+    private String level;
+
+    @ElementCollection
+    @CollectionTable(name = "course_syllabus", joinColumns = @JoinColumn(name = "course_id"))
+    @Column(name = "syllabus_item")
+    private List<String> syllabus;
+
     @ManyToOne
     @JoinColumn(name = "bank_id")
     private Bank bank;
@@ -39,4 +58,7 @@ public class Course extends AuditModel {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Module> modules;
 }

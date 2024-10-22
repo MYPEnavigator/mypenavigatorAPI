@@ -19,8 +19,8 @@ public class Question extends AuditModel {
     @Column(name = "question_text")
     private String questionText;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "multiple")
+    private Boolean multiple;
 
     @ManyToOne
     @JoinColumn(name = "test_id")

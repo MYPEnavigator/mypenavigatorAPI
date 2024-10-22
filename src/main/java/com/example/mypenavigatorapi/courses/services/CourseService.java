@@ -28,6 +28,14 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    public List<Course> findAllByUserId(Long userId) {
+        return courseRepository.findAllByUserId(userId);
+    }
+
+    public List<Course> findAllByBankId(Long bankId) {
+        return courseRepository.findAllByBankId(bankId);
+    }
+
     public Course findById(Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
@@ -55,6 +63,13 @@ public class CourseService {
 
         course.setTitle(dto.getTitle());
         course.setDescription(dto.getDescription());
+        course.setSlug(dto.getSlug());
+        course.setImageUrl(dto.getImageUrl());
+        course.setVideoUrl(dto.getVideoUrl());
+        course.setManagerName(dto.getManagerName());
+        course.setSignatureUrl(dto.getSignatureUrl());
+        course.setLevel(dto.getLevel());
+        course.setSyllabus(dto.getSyllabus());
         course.setRewardPoints(dto.getRewardPoints());
 
         return courseRepository.save(course);

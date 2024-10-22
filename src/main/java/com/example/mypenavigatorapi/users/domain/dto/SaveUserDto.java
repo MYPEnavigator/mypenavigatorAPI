@@ -17,13 +17,17 @@ public class SaveUserDto {
 
     @NotNull
     @NotBlank
+    private String lastName;
+
+    private String profilePicture;
+
+    @NotNull
+    @NotBlank
     @Email
     private String email;
 
     private String password;
 
-    @NotNull
-    @NotBlank
     private Role role;
 
     @NotNull

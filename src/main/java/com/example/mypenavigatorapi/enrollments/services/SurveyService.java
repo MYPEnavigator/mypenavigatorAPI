@@ -41,7 +41,7 @@ public class SurveyService {
         survey.setUser(user);
         survey.setCourse(course);
 
-        List<SurveyQuestionResponse> responses = dto.getResponsesDto().stream()
+        List<SurveyQuestionResponse> responses = dto.getResponses().stream()
                 .map(responseDto -> {
                     SurveyQuestionResponse response = Mapper.map(responseDto, SurveyQuestionResponse.class);
                     response.setSurvey(survey);

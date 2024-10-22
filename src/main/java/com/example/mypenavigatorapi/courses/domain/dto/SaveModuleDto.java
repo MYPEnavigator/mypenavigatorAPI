@@ -14,7 +14,15 @@ public class SaveModuleDto {
 
     @NotNull
     @NotBlank
-    private String description;
+    private String imageUrl;
+
+    @NotNull
+    @NotBlank
+    private String materialUrl;
+
+    @NotNull
+    @NotBlank
+    private String videoUrl;
 
     @NotNull
     private Integer order;

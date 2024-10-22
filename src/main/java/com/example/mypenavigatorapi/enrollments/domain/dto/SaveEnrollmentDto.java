@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 public class SaveEnrollmentDto {
     private Boolean isCompleted = false;
-    private Boolean isApproved = false;
     private Integer progress = 0;
     private String certificateUrl = "";
 

@@ -13,7 +13,7 @@ import java.util.List;
 public class SaveSurveyDto {
 
     @NotEmpty
-    private List<SaveSurveyQuestionResponseDto> responsesDto;
+    private List<SaveSurveyQuestionResponseDto> responses;
 
     @NotNull
     @Positive

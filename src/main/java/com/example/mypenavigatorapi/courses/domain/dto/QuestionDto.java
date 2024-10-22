@@ -10,6 +10,6 @@ import java.util.List;
 public class QuestionDto {
     private Long id;
     private String questionText;
-    private String type;
+    private Boolean multiple;
     private List<AnswerDto> answers;
 }

@@ -17,12 +17,17 @@ public class Module extends AuditModel {
     @Column(name = "title")
     private String title;
 
-    @Lob
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "module_order")
     private Integer order;
+
+    @Column(name = "image_url")
+    private String image_url;
+
+    @Column(name = "material_url")
+    private String material_url;
+
+    @Column(name = "video_url")
+    private String video_url;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

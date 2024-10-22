@@ -44,9 +44,7 @@ public class ModuleService {
         Module module = moduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
 
-        module.setTitle(dto.getTitle());
-        module.setDescription(dto.getDescription());
-        module.setOrder(dto.getOrder());
+        Mapper.merge(dto, module);
 
         return moduleRepository.save(module);
     }

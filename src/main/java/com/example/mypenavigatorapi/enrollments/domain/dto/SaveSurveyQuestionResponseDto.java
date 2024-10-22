@@ -13,6 +13,5 @@ public class SaveSurveyQuestionResponseDto {
     private String question;
 
     @NotNull
-    @NotBlank
-    private String answer;
+    private Integer rating;
 }

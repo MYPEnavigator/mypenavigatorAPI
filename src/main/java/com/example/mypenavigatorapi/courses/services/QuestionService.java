@@ -48,7 +48,7 @@ public class QuestionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Question", "id", id));
 
         question.setQuestionText(dto.getQuestionText());
-        question.setType(dto.getType());
+        question.setMultiple(dto.getMultiple());
 
         return getQuestionWithAnswers(dto, question);
     }

@@ -19,9 +19,6 @@ public class Enrollment extends AuditModel {
     @Column(name = "is_completed")
     private Boolean isCompleted;
 
-    @Column(name = "is_approved")
-    private Boolean isApproved;
-
     @Column(name = "progress")
     private Integer progress;
 

@@ -8,7 +8,9 @@ import lombok.Setter;
 public class ModuleDto {
     private Long id;
     private String title;
-    private String description;
+    private String imageUrl;
+    private String materialUrl;
+    private String videoUrl;
     private Integer order;
     private TestDto test;
 }
