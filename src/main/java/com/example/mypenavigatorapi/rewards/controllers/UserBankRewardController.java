@@ -17,6 +17,15 @@ public class UserBankRewardController {
     @Autowired
     private UserBankRewardService userBankRewardService;
 
+    @GetMapping("/reward/{rewardId}")
+    @Operation(summary = "Get all rewards claimed by user")
+    public List<UserBankRewardDto> findAllByBankRewardId(@PathVariable("rewardId") Long rewardId) {
+        return userBankRewardService.findAllByBankRewardId(rewardId)
+                .stream()
+                .map(userBankReward -> Mapper.map(userBankReward, UserBankRewardDto.class))
+                .toList();
+    }
+
     @GetMapping("/user/{userId}")
     @Operation(summary = "Get all rewards claimed by user")
     public List<UserBankRewardDto> findAllByUserId(@PathVariable("userId") Long userId) {

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Entity
@@ -20,7 +22,21 @@ public class Answer extends AuditModel {
     @Column(name = "is_correct")
     private Boolean isCorrect;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "question_id", insertable = true)
+    @ManyToOne
+    @JoinColumn(name = "question_id", insertable = true, updatable = true)
     private Question question;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Answer answer = (Answer) o;
+        return Objects.equals(id, answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

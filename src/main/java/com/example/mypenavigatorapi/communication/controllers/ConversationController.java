@@ -3,7 +3,6 @@ package com.example.mypenavigatorapi.communication.controllers;
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.communication.domain.dto.ConversationDto;
 import com.example.mypenavigatorapi.communication.domain.dto.SaveConversationDto;
-import com.example.mypenavigatorapi.communication.domain.entities.Conversation;
 import com.example.mypenavigatorapi.communication.services.ConversationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +20,13 @@ public class ConversationController {
     @Autowired
     private ConversationService conversationService;
 
+    @GetMapping
+    @Operation(summary = "Find by sender and receiver")
+    public ConversationDto findBySenderAndReceiver(
+            @RequestParam("senderId") Long senderId,
+            @RequestParam("receiverId") Long receiverId) {
+        return Mapper.map(conversationService.findBySenderAndReceiver(senderId, receiverId), ConversationDto.class);
+    }
 
     @GetMapping("/{userId}")
     @Operation(summary = "Get all conversations by user id")
@@ -36,21 +42,6 @@ public class ConversationController {
         return Mapper.map(conversationService.saveConversation(dto), ConversationDto.class);
     }
 
-    @PostMapping("/{conversationId}/participants/{userId}")
-    @Operation(summary = "Add participant to conversation")
-    public ConversationDto addParticipantToConversation(@PathVariable("conversationId") Long conversationId,
-                                                        @PathVariable("userId") Long userId) {
-        Conversation conversation = conversationService.addParticipantToConversation(conversationId, userId);
-        return Mapper.map(conversation, ConversationDto.class);
-    }
-
-    @PatchMapping("/{conversationId}/participants/{userId}")
-    @Operation(summary = "Remove participant from conversation")
-    public ConversationDto removeParticipantFromConversation(@PathVariable("conversationId") Long conversationId,
-                                                             @PathVariable("userId") Long userId) {
-        Conversation conversation = conversationService.removeParticipantFromConversation(conversationId, userId);
-        return Mapper.map(conversation, ConversationDto.class);
-    }
 
     @DeleteMapping("/{conversationId}")
     @Operation(summary = "Delete conversation by id")

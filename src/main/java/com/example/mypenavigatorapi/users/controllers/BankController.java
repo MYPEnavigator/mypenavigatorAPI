@@ -2,6 +2,7 @@ package com.example.mypenavigatorapi.users.controllers;
 
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.users.domain.dto.BankDto;
+import com.example.mypenavigatorapi.users.domain.dto.MypeDto;
 import com.example.mypenavigatorapi.users.domain.dto.SaveBankDto;
 import com.example.mypenavigatorapi.users.services.BankService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,12 @@ public class BankController {
     @Operation(summary = "Get bank by id")
     public BankDto findById(@PathVariable("id") Long id) {
         return Mapper.map(bankService.findById(id), BankDto.class);
+    }
+
+    @GetMapping("/ruc/{ruc}")
+    @Operation(summary = "Get mype by ruc")
+    public MypeDto findByRuc(@PathVariable("ruc") String ruc) {
+        return Mapper.map(bankService.findByRuc(ruc), MypeDto.class);
     }
 
     @PostMapping

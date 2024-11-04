@@ -33,6 +33,10 @@ public class SaveCourseDto {
 
     @NotNull
     @NotBlank
+    private String duration;
+
+    @NotNull
+    @NotBlank
     private String videoUrl;
 
     @NotNull

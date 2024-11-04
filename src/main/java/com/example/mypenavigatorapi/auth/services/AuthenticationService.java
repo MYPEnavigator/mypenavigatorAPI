@@ -34,7 +34,11 @@ public class AuthenticationService {
         Optional<User> user = usersRepository.findByEmail(request.getUsername());
 
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("Usuario no encontrado");
+        }
+
+        if (!user.get().isEnabled()) {
+            throw new UsernameNotFoundException("El usuario no está activo");
         }
 
         String token = jwtService.generateToken(user.get());

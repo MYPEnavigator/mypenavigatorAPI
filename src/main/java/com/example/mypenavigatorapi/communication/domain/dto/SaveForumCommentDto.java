@@ -1,7 +1,6 @@
 package com.example.mypenavigatorapi.communication.domain.dto;
 
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -9,12 +8,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SaveConversationDto {
+public class SaveForumCommentDto {
+    @NotEmpty
     @NotNull
-    @Positive
-    private Long firstParticipantId;
+    private String content;
 
     @NotNull
     @Positive
-    private Long secondParticipantId;
+    private Long userId;
+
+    @NotNull
+    @Positive
+    private Long courseId;
+
+    private Long parentId;
 }

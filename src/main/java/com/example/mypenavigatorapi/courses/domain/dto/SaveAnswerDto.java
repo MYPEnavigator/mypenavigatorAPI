@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SaveAnswerDto {
+    private Long id;
+
     @NotNull
     @NotBlank
     private String answerText;

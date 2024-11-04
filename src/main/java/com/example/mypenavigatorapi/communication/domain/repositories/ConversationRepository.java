@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-
-    @Query("SELECT c FROM Conversation c JOIN c.participants p WHERE p.user.id = :userId")
+    @Query("SELECT c FROM Conversation c  WHERE c.firstParticipant.id = :userId or c.secondParticipant.id = :userId")
     List<Conversation> findAllByUserId(@Param("userId") Long userId);
+
+    Optional<Conversation> findByFirstParticipantIdAndSecondParticipantId(Long firstParticipantId, Long secondParticipantId);
 }

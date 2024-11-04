@@ -22,6 +22,10 @@ public class SaveModuleDto {
 
     @NotNull
     @NotBlank
+    private String duration;
+
+    @NotNull
+    @NotBlank
     private String videoUrl;
 
     @NotNull

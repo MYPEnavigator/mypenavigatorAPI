@@ -30,6 +30,12 @@ public class ModuleController {
                 .toList();
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get module by id")
+    public ModuleDto findById(@PathVariable("id") Long id){
+        return Mapper.map(moduleService.findById(id), ModuleDto.class);
+    }
+
     @PostMapping
     @Operation(summary = "Create a new module")
     public ModuleDto save(

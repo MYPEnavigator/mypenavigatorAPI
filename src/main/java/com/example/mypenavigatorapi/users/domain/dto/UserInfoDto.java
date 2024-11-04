@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDto extends AuditDto {
+public class UserInfoDto extends AuditDto {
     private Long id;
     private String name;
     private String lastName;
@@ -15,6 +15,4 @@ public class UserDto extends AuditDto {
     private Role role;
     private String profilePicture;
     private String email;
-    private MypeDto mype;
-    private BankDto bank;
 }

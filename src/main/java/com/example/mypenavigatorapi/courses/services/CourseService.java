@@ -35,6 +35,10 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    public List<Course> findAllByCreatorId(Long creatorId) {
+        return courseRepository.findAllByUserId(creatorId);
+    }
+
     public List<Course> findAllByUserId(Long userId) {
         List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
 
@@ -77,16 +81,7 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
 
-        course.setTitle(dto.getTitle());
-        course.setDescription(dto.getDescription());
-        course.setSlug(dto.getSlug());
-        course.setImageUrl(dto.getImageUrl());
-        course.setVideoUrl(dto.getVideoUrl());
-        course.setManagerName(dto.getManagerName());
-        course.setSignatureUrl(dto.getSignatureUrl());
-        course.setLevel(dto.getLevel());
-        course.setSyllabus(dto.getSyllabus());
-        course.setRewardPoints(dto.getRewardPoints());
+        Mapper.merge(dto, course);
 
         return courseRepository.save(course);
     }

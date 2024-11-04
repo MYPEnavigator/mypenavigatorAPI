@@ -1,6 +1,7 @@
 package com.example.mypenavigatorapi.communication.domain.entities;
 
 import com.example.mypenavigatorapi.common.domain.entity.AuditModel;
+import com.example.mypenavigatorapi.users.domain.entities.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,11 @@ public class Conversation extends AuditModel {
     @OneToMany(mappedBy = "conversation")
     private List<Message> messages;
 
-    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<ConversationParticipant> participants;
+    @ManyToOne
+    @JoinColumn(name = "first_participant_id")
+    private User firstParticipant;
+
+    @ManyToOne
+    @JoinColumn(name = "second_participant_id")
+    private User secondParticipant;
 }

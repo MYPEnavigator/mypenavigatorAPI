@@ -60,4 +60,9 @@ public class User extends AuditModel implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
+    }
 }

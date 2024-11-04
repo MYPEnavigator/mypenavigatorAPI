@@ -11,6 +11,7 @@ public class ModuleDto {
     private String imageUrl;
     private String materialUrl;
     private String videoUrl;
+    private String duration;
     private Integer order;
     private TestDto test;
 }

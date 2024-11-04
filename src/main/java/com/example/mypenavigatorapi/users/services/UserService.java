@@ -31,7 +31,15 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<User> findAll() {
+    public List<User> findAll(Long bankId, Long mypeId) {
+        if(bankId != 0) {
+            return userRepository.findAllByBankId(bankId);
+        }
+
+        if (mypeId != 0) {
+            return userRepository.findAllByMypeId(mypeId);
+        }
+
         return userRepository.findAll();
     }
 
@@ -65,7 +73,7 @@ public class UserService {
             mype = mypeRepository.findById(mypeId)
                     .orElseThrow(() -> new ResourceNotFoundException("Mype", "id", mypeId));
 
-            if (userRepository.findAllByBankId(bankId).isEmpty()) {
+            if (userRepository.findAllByMypeId(mypeId).isEmpty()) {
                 role = Role.mype_admin;
             } else {
                 role = Role.mype_user;
@@ -83,19 +91,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User toggleActive(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+
+        user.setActive(!user.isActive());
+        return userRepository.save(user);
+    }
+
     public User update(Long id, SaveUserDto dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
-        String userPassword = user.getPassword();
         Mapper.merge(dto, user);
-
-        if (dto.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        }else {
-            user.setPassword(userPassword);
-        }
-
         return userRepository.save(user);
     }
 

@@ -34,8 +34,11 @@ public class ModuleService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
 
+        List<Module> modules = moduleRepository.findAllByCourseId(courseId);
+
         Module module = Mapper.map(dto, Module.class);
         module.setCourse(course);
+        module.setOrder(modules.size() + 1);
 
         return moduleRepository.save(module);
     }

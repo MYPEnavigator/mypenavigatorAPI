@@ -10,6 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 public class SaveQuestionDto {
+    private Long id;
+
     @NotNull
     @NotBlank
     private String questionText;

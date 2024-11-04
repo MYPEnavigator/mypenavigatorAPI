@@ -30,6 +30,9 @@ public class Course extends AuditModel {
     @Column(name = "video_url")
     private String videoUrl;
 
+    @Column(name = "duration")
+    private String duration;
+
     @Lob
     @Column(name = "description")
     private String description;

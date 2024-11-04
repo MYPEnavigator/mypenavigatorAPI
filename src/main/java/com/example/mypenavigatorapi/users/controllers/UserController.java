@@ -3,6 +3,7 @@ package com.example.mypenavigatorapi.users.controllers;
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.users.domain.dto.SaveUserDto;
 import com.example.mypenavigatorapi.users.domain.dto.UserDto;
+import com.example.mypenavigatorapi.users.domain.dto.UserInfoDto;
 import com.example.mypenavigatorapi.users.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,9 +24,12 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Get all users")
-    public List<UserDto> findAll() {
-        return userService.findAll().stream()
-                .map(user -> Mapper.map(user, UserDto.class))
+    public List<UserInfoDto> findAll(
+            @RequestParam(value = "bankId", defaultValue = "0") Long bankId,
+            @RequestParam(value = "mypeId", defaultValue = "0") Long mypeId
+    ) {
+        return userService.findAll(bankId, mypeId).stream()
+                .map(user -> Mapper.map(user, UserInfoDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -43,6 +47,12 @@ public class UserController {
             @RequestParam(value = "mypeId", defaultValue = "0") Long mypeId
     ) {
         return Mapper.map(userService.save(dto, bankId, mypeId), UserDto.class);
+    }
+
+    @PatchMapping("/{id}/toggle-active")
+    @Operation(summary = "Toggle user active status")
+    public UserDto toggleActive(@PathVariable("id") Long id) {
+        return Mapper.map(userService.toggleActive(id), UserDto.class);
     }
 
     @PatchMapping("/{id}")

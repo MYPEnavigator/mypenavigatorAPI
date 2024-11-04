@@ -6,6 +6,7 @@ import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.users.domain.dto.BankDto;
 import com.example.mypenavigatorapi.users.domain.dto.SaveBankDto;
 import com.example.mypenavigatorapi.users.domain.entities.Bank;
+import com.example.mypenavigatorapi.users.domain.entities.Mype;
 import com.example.mypenavigatorapi.users.domain.repositories.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,11 @@ public class BankService {
     public Bank findById(Long id) {
         return bankRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Bank", "id", id));
+    }
+
+    public Bank findByRuc(String ruc) {
+        return bankRepository.findByRuc(ruc)
+                .orElseThrow(() -> new ResourceNotFoundException("Bank", "ruc", ruc));
     }
 
     public Bank save(SaveBankDto dto) {

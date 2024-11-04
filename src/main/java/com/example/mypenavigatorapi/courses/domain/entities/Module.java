@@ -29,6 +29,9 @@ public class Module extends AuditModel {
     @Column(name = "video_url")
     private String videoUrl;
 
+    @Column(name = "duration")
+    private String duration;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;

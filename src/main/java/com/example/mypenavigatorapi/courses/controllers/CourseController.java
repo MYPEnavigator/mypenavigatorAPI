@@ -2,6 +2,7 @@ package com.example.mypenavigatorapi.courses.controllers;
 
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.courses.domain.dto.CourseDto;
+import com.example.mypenavigatorapi.courses.domain.dto.CourseInfoDto;
 import com.example.mypenavigatorapi.courses.domain.dto.SaveCourseDto;
 import com.example.mypenavigatorapi.courses.services.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,8 +24,16 @@ public class CourseController {
 
     @GetMapping
     @Operation(summary = "Get all courses")
-    public List<CourseDto> findAll() {
+    public List<CourseInfoDto> findAll() {
         return courseService.findAll().stream()
+                .map(course -> Mapper.map(course, CourseInfoDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/creator/{creatorId}")
+    @Operation(summary = "Get all courses by creator id")
+    public List<CourseDto> findAllByCreatorId(@PathVariable("creatorId") Long creatorId) {
+        return courseService.findAllByCreatorId(creatorId).stream()
                 .map(course -> Mapper.map(course, CourseDto.class))
                 .collect(Collectors.toList());
     }

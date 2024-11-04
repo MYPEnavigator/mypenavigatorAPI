@@ -39,37 +39,47 @@ public class GlobalExceptionHandler {
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
             errorDetail.setProperty("message", "El correo o la contraseña son incorrectos");
+            return errorDetail;
         }
 
         if (exception instanceof AccountStatusException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setProperty("message", "La cuenta está deshabilitada");
+            return errorDetail;
         }
 
         if (exception instanceof AccessDeniedException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setProperty("message", "No estás autorizado para acceder a este recurso");
+            return errorDetail;
         }
 
         if (exception instanceof SignatureException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setProperty("message", "La firma JWT es inválida");
+            return errorDetail;
         }
 
         if (exception instanceof ExpiredJwtException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setProperty("message", "Tu sesión ha expirado");
+            return errorDetail;
         }
 
         if(exception instanceof ResourceNotFoundException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), "Resource not found");
             errorDetail.setProperty("message", exception.getMessage());
+            return errorDetail;
         }
 
         if(exception instanceof BadRequestException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), "Bad request");
             errorDetail.setProperty("message", exception.getMessage());
+            return errorDetail;
         }
+
+        errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), "Internal server error");
+        errorDetail.setProperty("message", exception.getMessage());
 
         return errorDetail;
     }

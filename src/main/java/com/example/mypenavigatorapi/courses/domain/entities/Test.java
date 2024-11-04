@@ -23,6 +23,6 @@ public class Test extends AuditModel {
     @JoinColumn(name = "module_id", referencedColumnName = "id")
     private Module module;
 
-    @OneToMany(mappedBy = "test")
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Question> questions;
 }
