@@ -111,6 +111,11 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
         Mapper.merge(dto, user);
+
+        if(dto.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
         return userRepository.save(user);
     }
 

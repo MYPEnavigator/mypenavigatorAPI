@@ -9,6 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SaveBankRewardDto {
+    private boolean active;
+
     @NotNull
     @NotBlank
     private String name;

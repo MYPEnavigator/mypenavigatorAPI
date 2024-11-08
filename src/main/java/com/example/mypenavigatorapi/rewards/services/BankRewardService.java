@@ -2,6 +2,8 @@ package com.example.mypenavigatorapi.rewards.services;
 
 import com.example.mypenavigatorapi.common.exceptions.ResourceNotFoundException;
 import com.example.mypenavigatorapi.common.mapper.Mapper;
+import com.example.mypenavigatorapi.courses.domain.entities.Course;
+import com.example.mypenavigatorapi.courses.services.CourseService;
 import com.example.mypenavigatorapi.rewards.domain.dto.SaveBankRewardDto;
 import com.example.mypenavigatorapi.rewards.domain.entities.BankReward;
 import com.example.mypenavigatorapi.rewards.domain.repositories.BankRewardRepository;
@@ -21,6 +23,9 @@ public class BankRewardService {
     @Autowired
     private BankService bankService;
 
+    @Autowired
+    private CourseService courseService;
+
     public List<BankReward> findAllByBankId(Long bankId) {
         return bankRewardRepository.findAllByBankId(bankId);
     }
@@ -34,6 +39,10 @@ public class BankRewardService {
         Bank bank = bankService.findById(bankId);
         BankReward bankReward = Mapper.map(dto, BankReward.class);
 
+        if (!hasEnoughPoints(bankId, bankReward.getRequiredPoints())) {
+            bankReward.setActive(false);
+        }
+
         bankReward.setBank(bank);
         return bankRewardRepository.save(bankReward);
     }
@@ -41,6 +50,10 @@ public class BankRewardService {
     public BankReward update(Long id, SaveBankRewardDto dto) {
         BankReward bankReward = bankRewardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("BankReward", "id", id));
+
+        if (!hasEnoughPoints(bankReward.getBank().getId(), bankReward.getRequiredPoints())) {
+            bankReward.setActive(false);
+        }
 
         Mapper.merge(dto, bankReward);
         return bankRewardRepository.save(bankReward);
@@ -54,4 +67,13 @@ public class BankRewardService {
         return ResponseEntity.ok().build();
     }
 
+    public boolean hasEnoughPoints(Long bankId, int points) {
+        List<Course> courses = courseService.findAllByBankId(bankId);
+
+        int totalPoints = courses.stream()
+                .mapToInt(Course::getRewardPoints)
+                .sum();
+
+        return totalPoints >= points;
+    }
 }
