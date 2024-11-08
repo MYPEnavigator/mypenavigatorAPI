@@ -1,5 +1,6 @@
 package com.example.mypenavigatorapi.communication.services;
 
+import com.example.mypenavigatorapi.common.events.NotificationEvent;
 import com.example.mypenavigatorapi.common.exceptions.ResourceNotFoundException;
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.communication.domain.dto.SaveNotificationDto;
@@ -8,6 +9,7 @@ import com.example.mypenavigatorapi.communication.domain.repositories.Notificati
 import com.example.mypenavigatorapi.users.domain.entities.User;
 import com.example.mypenavigatorapi.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +23,27 @@ public class NotificationService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     public List<Notification> findAllByUserId(Long userId) {
         return notificationRepository.findAllByUserId(userId);
     }
 
-    public Notification save(SaveNotificationDto dto, Long userId) {
+    public Notification save(SaveNotificationDto dto, Long userId, boolean publishEvent) {
         User user = userService.findById(userId);
 
         Notification notification = Mapper.map(dto, Notification.class);
 
         notification.setUser(user);
 
-        return notificationRepository.save(notification);
+
+        Notification notificationSaved = notificationRepository.save(notification);
+
+        if(publishEvent) {
+            eventPublisher.publishEvent(new NotificationEvent(this, notificationSaved));
+        }
+        return notificationSaved;
     }
 
     public ResponseEntity<?> delete(Long id) {

@@ -7,6 +7,8 @@ import com.example.mypenavigatorapi.courses.services.CourseService;
 import com.example.mypenavigatorapi.enrollments.domain.dto.SaveCourseCompletionHistoryDto;
 import com.example.mypenavigatorapi.enrollments.domain.entities.CourseCompletionHistory;
 import com.example.mypenavigatorapi.enrollments.domain.repositories.CourseCompletionHistoryRepository;
+import com.example.mypenavigatorapi.rewards.domain.dto.SaveUserBankPointsDto;
+import com.example.mypenavigatorapi.rewards.services.UserBankPointsService;
 import com.example.mypenavigatorapi.users.domain.entities.User;
 import com.example.mypenavigatorapi.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import java.util.List;
 public class CourseCompletionHistoryService {
     @Autowired
     private CourseCompletionHistoryRepository courseCompletionHistoryRepository;
+
+    @Autowired
+    private UserBankPointsService userBankPointsService;
 
     @Autowired
     private UserService userService;
@@ -54,6 +59,26 @@ public class CourseCompletionHistoryService {
         courseCompletionHistory.setCompletionDate(new Date());
 
         return courseCompletionHistoryRepository.save(courseCompletionHistory);
+    }
+
+    public void completeCourse(Long userId, Long courseId, Integer result){
+        User user = userService.findById(userId);
+        Course course = courseService.findById(courseId);
+
+        CourseCompletionHistory courseCompletionHistory = new CourseCompletionHistory();
+        courseCompletionHistory.setUser(user);
+        courseCompletionHistory.setCourse(course);
+        courseCompletionHistory.setResultPercentage(result);
+        courseCompletionHistory.setPointsEarned(course.getRewardPoints());
+        courseCompletionHistory.setBank(course.getBank());
+        courseCompletionHistory.setCompletionDate(new Date());
+
+        courseCompletionHistoryRepository.save(courseCompletionHistory);
+
+        SaveUserBankPointsDto points = new SaveUserBankPointsDto();
+        points.setPoints(course.getRewardPoints());
+
+        userBankPointsService.earnPoints(userId,course.getBank().getId(), points);
     }
 
     public ResponseEntity<?> delete(Long id){

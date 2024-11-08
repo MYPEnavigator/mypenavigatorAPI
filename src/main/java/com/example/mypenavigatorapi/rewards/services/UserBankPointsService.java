@@ -31,26 +31,31 @@ public class UserBankPointsService {
         return userBankPointsRepository.findAllByUserId(userId);
     }
 
-    public UserBankPoints save(Long userId, Long bankId, SaveUserBankPointsDto dto) {
+    public UserBankPoints findByUserIdAndBankId(Long userId, Long bankId) {
+        return userBankPointsRepository.findByUserIdAndBankId(userId, bankId)
+                .orElseThrow(() -> new ResourceNotFoundException("UserBankPoints", "userId", userId));
+    }
+
+    public UserBankPoints create(Long userId, Long bankId){
         User user = userService.findById(userId);
         Bank bank = bankService.findById(bankId);
 
-        UserBankPoints userBankPoints = Mapper.map(dto, UserBankPoints.class);
-
+        UserBankPoints userBankPoints = new UserBankPoints();
         userBankPoints.setUser(user);
         userBankPoints.setBank(bank);
+        userBankPoints.setPoints(0);
 
         return userBankPointsRepository.save(userBankPoints);
     }
 
-    public UserBankPoints update(Long id, SaveUserBankPointsDto dto) {
-        UserBankPoints userBankPoints = userBankPointsRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("UserBankPoints", "id", id));
+    public UserBankPoints earnPoints(Long userId, Long bankId, SaveUserBankPointsDto dto) {
+        UserBankPoints userBankPoints = userBankPointsRepository
+                .findByUserIdAndBankId(userId, bankId)
+                .orElseGet(() -> create(userId, bankId));
 
-        Mapper.merge(dto, userBankPoints);
+        userBankPoints.setPoints(userBankPoints.getPoints() + dto.getPoints());
         return userBankPointsRepository.save(userBankPoints);
     }
-
     public ResponseEntity<?> delete(Long id) {
         UserBankPoints userBankPoints = userBankPointsRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UserBankPoints", "id", id));

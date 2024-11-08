@@ -7,7 +7,10 @@ import com.example.mypenavigatorapi.courses.domain.entities.Module;
 import com.example.mypenavigatorapi.courses.services.CourseService;
 import com.example.mypenavigatorapi.courses.services.ModuleService;
 import com.example.mypenavigatorapi.enrollments.domain.dto.SaveUserModuleTrackingDto;
+import com.example.mypenavigatorapi.enrollments.domain.entities.Enrollment;
 import com.example.mypenavigatorapi.enrollments.domain.entities.UserModuleTracking;
+import com.example.mypenavigatorapi.enrollments.domain.repositories.CourseCompletionHistoryRepository;
+import com.example.mypenavigatorapi.enrollments.domain.repositories.EnrollmentRepository;
 import com.example.mypenavigatorapi.enrollments.domain.repositories.UserModuleTrackingRepository;
 import com.example.mypenavigatorapi.users.domain.entities.User;
 import com.example.mypenavigatorapi.users.services.UserService;
@@ -27,6 +30,12 @@ public class UserModuleTrackingService {
     private UserModuleTrackingRepository userModuleTrackingRepository;
 
     @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private CourseCompletionHistoryService completionHistoryService;
+
+    @Autowired
     private ModuleService moduleService;
 
     @Autowired
@@ -34,6 +43,7 @@ public class UserModuleTrackingService {
 
     @Autowired
     private UserService userService;
+
 
     public List<UserModuleTracking> findAllByUserIdAndCourseId(Long userId, Long courseId){
         return userModuleTrackingRepository.findAllByUserIdAndCourseId(userId, courseId);
@@ -134,7 +144,40 @@ public class UserModuleTrackingService {
             userModuleTrackingRepository.save(next.get());
         }
 
+        boolean allCompleted = userTracking.stream().allMatch(UserModuleTracking::getIsCompleted);
+        int modulesCompleted = (int) userTracking.stream().filter(UserModuleTracking::getIsCompleted).count();
+
+        updateEnrollmentProgress(
+                userModuleTracking.getUser().getId(),
+                userModuleTracking.getCourse().getId(),
+                (modulesCompleted * 100) / userTracking.size()
+        );
+
+        if(allCompleted){
+            int average = 0;
+            for (UserModuleTracking tracking : userTracking) {
+                average += tracking.getTestScore();
+            }
+
+            completionHistoryService.completeCourse(
+                    userModuleTracking.getUser().getId(),
+                    userModuleTracking.getCourse().getId(),
+                    average / userTracking.size()
+            );
+        }
+
         return userModuleTrackingRepository.save(userModuleTracking);
+    }
+
+    public void updateEnrollmentProgress(Long userId, Long courseId, Integer progress) {
+        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Enrollment", "userId and courseId", userId + " and " + courseId));
+
+        enrollment.setProgress(progress);
+        if(progress == 100){
+            enrollment.setIsCompleted(true);
+        }
+        enrollmentRepository.save(enrollment);
     }
 
     public ResponseEntity<?> delete(Long id){

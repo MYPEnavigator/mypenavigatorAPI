@@ -11,4 +11,8 @@ public class SaveNotificationDto {
     @NotNull
     @NotBlank
     private String text;
+
+    @NotNull
+    @NotBlank
+    private String title;
 }

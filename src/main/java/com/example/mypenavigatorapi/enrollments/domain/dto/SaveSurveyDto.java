@@ -14,12 +14,4 @@ public class SaveSurveyDto {
 
     @NotEmpty
     private List<SaveSurveyQuestionResponseDto> responses;
-
-    @NotNull
-    @Positive
-    private Long userId;
-
-    @NotNull
-    @Positive
-    private Long courseId;
 }

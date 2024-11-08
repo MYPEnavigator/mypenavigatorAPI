@@ -2,6 +2,9 @@ package com.example.mypenavigatorapi.users.services;
 
 import com.example.mypenavigatorapi.common.exceptions.ResourceNotFoundException;
 import com.example.mypenavigatorapi.common.mapper.Mapper;
+import com.example.mypenavigatorapi.communication.domain.dto.SaveNotificationDto;
+import com.example.mypenavigatorapi.communication.events.NewNotificationEvent;
+import com.example.mypenavigatorapi.rewards.domain.entities.UserBankReward;
 import com.example.mypenavigatorapi.users.domain.dto.SaveUserDto;
 import com.example.mypenavigatorapi.users.domain.entities.Bank;
 import com.example.mypenavigatorapi.users.domain.entities.Mype;
@@ -11,6 +14,7 @@ import com.example.mypenavigatorapi.users.domain.repositories.BankRepository;
 import com.example.mypenavigatorapi.users.domain.repositories.MypeRepository;
 import com.example.mypenavigatorapi.users.domain.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +34,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     public List<User> findAll(Long bankId, Long mypeId) {
         if(bankId != 0) {
@@ -114,5 +121,16 @@ public class UserService {
         userRepository.delete(user);
 
         return ResponseEntity.ok().build();
+    }
+
+    public void sendUserBankRewardNotification(Long bankId, UserBankReward userBankReward) {
+        List<User> users = userRepository.findAllByBankId(bankId);
+
+        users.forEach(user -> {
+            SaveNotificationDto dto = new SaveNotificationDto();
+            dto.setTitle("Se reclamó un premio");
+            dto.setText("El usuario " + userBankReward.getUser().getName() + " reclamó el premio " + userBankReward.getBankReward().getName());
+            eventPublisher.publishEvent(new NewNotificationEvent(this, user.getId(), dto, true));
+        });
     }
 }

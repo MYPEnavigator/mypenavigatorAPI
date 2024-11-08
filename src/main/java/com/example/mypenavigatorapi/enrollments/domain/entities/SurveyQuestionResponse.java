@@ -20,6 +20,6 @@ public class SurveyQuestionResponse {
     private Integer rating;
 
     @ManyToOne
-    @JoinColumn(name = "survey_id")
+    @JoinColumn(name = "survey_id", insertable = true, updatable = true)
     private Survey survey;
 }

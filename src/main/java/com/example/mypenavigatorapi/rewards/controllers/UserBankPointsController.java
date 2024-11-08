@@ -1,12 +1,10 @@
 package com.example.mypenavigatorapi.rewards.controllers;
 
 import com.example.mypenavigatorapi.common.mapper.Mapper;
-import com.example.mypenavigatorapi.rewards.domain.dto.SaveUserBankPointsDto;
 import com.example.mypenavigatorapi.rewards.domain.dto.UserBankPointsDto;
 import com.example.mypenavigatorapi.rewards.services.UserBankPointsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/bank-points")
 @Tag(name = "user-bank-points", description = "endpoints to manage user points with any bank")
 public class UserBankPointsController {
+
     @Autowired
     private UserBankPointsService userBankPointsService;
 
@@ -29,23 +28,12 @@ public class UserBankPointsController {
                 .toList();
     }
 
-    @PostMapping
-    @Operation(summary = "Create a new user's points in a bank")
-    public UserBankPointsDto save(
-            @RequestParam(value = "userId", defaultValue = "0") Long userId,
-            @RequestParam(value = "bankId", defaultValue = "0") Long bankId,
-            @Valid @RequestBody SaveUserBankPointsDto dto
-            ) {
-        return Mapper.map(userBankPointsService.save(userId, bankId, dto), UserBankPointsDto.class);
-    }
-
-    @PatchMapping("/{id}")
-    @Operation(summary = "Update user's points in a bank by id")
-    public UserBankPointsDto update(
-            @PathVariable("id") Long id,
-            @Valid @RequestBody SaveUserBankPointsDto dto
-            ) {
-        return Mapper.map(userBankPointsService.update(id, dto), UserBankPointsDto.class);
+    @GetMapping
+    @Operation(summary = "Get user's points in a bank")
+    public UserBankPointsDto findByUserIdAndBankId(
+            @RequestParam("userId") Long userId,
+            @RequestParam("bankId") Long bankId) {
+        return Mapper.map(userBankPointsService.findByUserIdAndBankId(userId, bankId), UserBankPointsDto.class);
     }
 
     @DeleteMapping("/{id}")

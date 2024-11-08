@@ -2,6 +2,7 @@ package com.example.mypenavigatorapi.enrollments.controllers;
 
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.enrollments.domain.dto.EnrollmentDto;
+import com.example.mypenavigatorapi.enrollments.domain.dto.EnrollmentWithCourseDto;
 import com.example.mypenavigatorapi.enrollments.domain.dto.EnrollmentWithUserDto;
 import com.example.mypenavigatorapi.enrollments.domain.dto.SaveEnrollmentDto;
 import com.example.mypenavigatorapi.enrollments.services.EnrollmentService;
@@ -23,10 +24,10 @@ public class EnrollmentController {
 
     @GetMapping("/user/{userId}")
     @Operation(summary = "Get all course where the user is enroll")
-    public List<EnrollmentDto> findAllByUserId(@PathVariable("userId") Long userId) {
+    public List<EnrollmentWithCourseDto> findAllByUserId(@PathVariable("userId") Long userId) {
         return enrollmentService.findAllByUserId(userId)
                 .stream()
-                .map(enrollment -> Mapper.map(enrollment, EnrollmentDto.class))
+                .map(enrollment -> Mapper.map(enrollment, EnrollmentWithCourseDto.class))
                 .toList();
     }
 

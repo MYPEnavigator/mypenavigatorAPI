@@ -5,6 +5,7 @@ import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.courses.domain.entities.Course;
 import com.example.mypenavigatorapi.courses.services.CourseService;
 import com.example.mypenavigatorapi.enrollments.domain.dto.SaveSurveyDto;
+import com.example.mypenavigatorapi.enrollments.domain.entities.Enrollment;
 import com.example.mypenavigatorapi.enrollments.domain.entities.Survey;
 import com.example.mypenavigatorapi.enrollments.domain.entities.SurveyQuestionResponse;
 import com.example.mypenavigatorapi.enrollments.domain.repositories.SurveyRepository;
@@ -32,10 +33,15 @@ public class SurveyService {
         return surveyRepository.findAllByCourseId(courseId);
     }
 
+    public Survey findByUserIdAndCourseId(Long userId, Long courseId) {
+        return surveyRepository.findByUserIdAndCourseId(userId, courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Survey", "userId and courseId", userId + " and " + courseId));
+    }
+
     @Transactional
-    public Survey save(SaveSurveyDto dto){
-        User user = userService.findById(dto.getUserId());
-        Course course = courseService.findById(dto.getCourseId());
+    public Survey save(SaveSurveyDto dto, Long userId, Long courseId) {
+        User user = userService.findById(userId);
+        Course course = courseService.findById(courseId);
 
         Survey survey = new Survey();
         survey.setUser(user);

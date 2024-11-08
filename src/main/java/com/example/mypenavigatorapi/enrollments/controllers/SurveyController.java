@@ -29,6 +29,15 @@ public class SurveyController {
                 .toList();
     }
 
+    @GetMapping
+    @Operation(summary = "Get Survey by user id and course id")
+    public SurveyDto findByUserIdAndCourseId(
+            @RequestParam Long userId,
+            @RequestParam Long courseId
+    ){
+        return Mapper.map(surveyService.findByUserIdAndCourseId(userId, courseId), SurveyDto.class);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get survey by id")
     public SurveyDto findById(@PathVariable Long id) {
@@ -37,8 +46,12 @@ public class SurveyController {
 
     @PostMapping
     @Operation(summary = "Create a new survey")
-    public SurveyDto save(@Valid @RequestBody SaveSurveyDto dto){
-        return Mapper.map(surveyService.save(dto), SurveyDto.class);
+    public SurveyDto save(
+            @Valid @RequestBody SaveSurveyDto dto,
+            @RequestParam Long userId,
+            @RequestParam Long courseId
+    ){
+        return Mapper.map(surveyService.save(dto, userId, courseId), SurveyDto.class);
     }
 
     @DeleteMapping("/{id}")

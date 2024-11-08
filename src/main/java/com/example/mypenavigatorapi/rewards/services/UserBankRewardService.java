@@ -8,6 +8,7 @@ import com.example.mypenavigatorapi.rewards.domain.entities.UserBankReward;
 import com.example.mypenavigatorapi.rewards.domain.repositories.BankRewardRepository;
 import com.example.mypenavigatorapi.rewards.domain.repositories.UserBankPointsRepository;
 import com.example.mypenavigatorapi.rewards.domain.repositories.UserBankRewardsRepository;
+import com.example.mypenavigatorapi.users.services.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class UserBankRewardService {
 
     @Autowired
     private BankRewardRepository bankRewardRepository;
+
+    @Autowired
+    private UserService userService;
 
 
     public List<UserBankReward> findAllByUserId(Long userId) {
@@ -64,6 +68,10 @@ public class UserBankRewardService {
         userBankReward.setBankReward(bankReward);
         userBankReward.setEarnedAt(new Date());
 
-        return userBankRewardsRepository.save(userBankReward);
+        UserBankReward userBankRewardSaved = userBankRewardsRepository.save(userBankReward);
+
+        userService.sendUserBankRewardNotification(bankReward.getBank().getId(), userBankRewardSaved);
+
+        return userBankRewardSaved;
     }
 }

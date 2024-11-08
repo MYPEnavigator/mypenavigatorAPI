@@ -2,6 +2,7 @@ package com.example.mypenavigatorapi.communication.controllers;
 
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.communication.domain.dto.NotificationDto;
+import com.example.mypenavigatorapi.communication.domain.dto.SaveNotificationDto;
 import com.example.mypenavigatorapi.communication.services.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,14 @@ public class NotificationController {
         return notificationService.findAllByUserId(userId).stream()
                 .map(notification -> Mapper.map(notification, NotificationDto.class))
                 .toList();
+    }
+
+    @PostMapping
+    @Operation(summary = "Create a new notification")
+    public NotificationDto saveNotification(
+            @RequestParam(value = "userId", defaultValue = "0") Long userId,
+            @RequestBody SaveNotificationDto dto) {
+        return Mapper.map(notificationService.save(dto, userId, true), NotificationDto.class);
     }
 
     @DeleteMapping("/{id}")
