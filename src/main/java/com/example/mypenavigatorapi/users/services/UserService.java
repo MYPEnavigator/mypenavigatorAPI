@@ -1,5 +1,6 @@
 package com.example.mypenavigatorapi.users.services;
 
+import com.example.mypenavigatorapi.common.exceptions.BadRequestException;
 import com.example.mypenavigatorapi.common.exceptions.ResourceNotFoundException;
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.communication.domain.dto.SaveNotificationDto;
@@ -61,6 +62,11 @@ public class UserService {
     }
 
     public User save(SaveUserDto dto, Long bankId, Long mypeId) {
+        if(userRepository.findByDni(dto.getDni()).isPresent()) {
+            throw new BadRequestException("El DNI ya está en uso");
+        }
+
+
         Role role = Role.admin;
 
         Bank bank = null;
@@ -107,6 +113,13 @@ public class UserService {
     }
 
     public User update(Long id, SaveUserDto dto) {
+        User existingUser = userRepository.findByDni(dto.getDni())
+                .orElse(null);
+
+        if(existingUser != null && !existingUser.getId().equals(id)) {
+            throw new BadRequestException("El DNI ya está en uso");
+        }
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
