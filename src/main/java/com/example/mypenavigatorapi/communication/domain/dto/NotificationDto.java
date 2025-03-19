@@ -10,4 +10,5 @@ public class NotificationDto extends AuditDto {
     private Long id;
     private String text;
     private String title;
+    private boolean seen;
 }

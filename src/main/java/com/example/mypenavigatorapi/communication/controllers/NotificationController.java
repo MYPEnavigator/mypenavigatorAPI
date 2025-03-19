@@ -37,6 +37,14 @@ public class NotificationController {
         return Mapper.map(notificationService.save(dto, userId, true), NotificationDto.class);
     }
 
+    @PatchMapping
+    @Operation(summary = "Mark notifications as seen")
+    public List<NotificationDto> seenNotifications(@RequestParam(value = "userId", defaultValue = "0") Long userId) {
+        return notificationService.seenNotifications(userId).stream()
+                .map(notification -> Mapper.map(notification, NotificationDto.class))
+                .toList();
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete notification by id")
     public ResponseEntity<?> deleteNotification(@PathVariable("id") Long id) {

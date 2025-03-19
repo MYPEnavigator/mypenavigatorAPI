@@ -1,11 +1,12 @@
 package com.example.mypenavigatorapi.courses.domain.dto;
 
+import com.example.mypenavigatorapi.common.domain.dto.AuditDto;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ModuleDto {
+public class ModuleDto extends AuditDto {
     private Long id;
     private String title;
     private String imageUrl;

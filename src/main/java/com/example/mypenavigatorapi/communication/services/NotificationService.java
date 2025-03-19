@@ -46,6 +46,19 @@ public class NotificationService {
         return notificationSaved;
     }
 
+    public List<Notification> seenNotifications(Long userId) {
+        List<Notification> notifications = notificationRepository.findAllByUserId(userId)
+                .stream()
+                .filter(notification -> !notification.isSeen())
+                .toList();
+
+        notifications.forEach(notification -> notification.setSeen(true));
+
+        notificationRepository.saveAll(notifications);
+
+        return notificationRepository.findAllByUserId(userId);
+    }
+
     public ResponseEntity<?> delete(Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Notification", "id", id));

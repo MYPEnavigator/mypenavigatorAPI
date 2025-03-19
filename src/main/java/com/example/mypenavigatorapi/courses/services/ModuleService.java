@@ -52,6 +52,15 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
+    public Module updateActiveStatus(Long id, boolean active){
+        Module module = moduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
+
+        module.setActive(active);
+
+        return moduleRepository.save(module);
+    }
+
     public ResponseEntity<?> delete(Long id){
         Module module = moduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));

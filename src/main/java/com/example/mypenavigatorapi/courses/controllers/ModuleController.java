@@ -52,6 +52,14 @@ public class ModuleController {
         return Mapper.map(moduleService.update(id, dto), ModuleDto.class);
     }
 
+    @PatchMapping("/{id}/active-status")
+    @Operation(summary = "Update module active status")
+    public  ModuleDto updateActiveStatus(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "active") boolean active){
+        return Mapper.map(moduleService.updateActiveStatus(id, active), ModuleDto.class);
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete module by id")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){

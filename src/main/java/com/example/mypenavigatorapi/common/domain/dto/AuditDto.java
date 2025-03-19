@@ -10,5 +10,5 @@ import java.util.Date;
 public class AuditDto {
     private Date createdAt;
     private Date updatedAt;
-    private Boolean active;
+    private boolean active;
 }

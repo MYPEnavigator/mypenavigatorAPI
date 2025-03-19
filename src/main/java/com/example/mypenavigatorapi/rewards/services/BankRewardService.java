@@ -39,7 +39,7 @@ public class BankRewardService {
         Bank bank = bankService.findById(bankId);
         BankReward bankReward = Mapper.map(dto, BankReward.class);
 
-        if (!hasEnoughPoints(bankId, bankReward.getRequiredPoints())) {
+        if (!hasRewardLessPointsThanTotalBankPoints(bankId, bankReward.getRequiredPoints())) {
             bankReward.setActive(false);
         }
 
@@ -51,7 +51,7 @@ public class BankRewardService {
         BankReward bankReward = bankRewardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("BankReward", "id", id));
 
-        if (!hasEnoughPoints(bankReward.getBank().getId(), bankReward.getRequiredPoints())) {
+        if (!hasRewardLessPointsThanTotalBankPoints(bankReward.getBank().getId(), bankReward.getRequiredPoints())) {
             bankReward.setActive(false);
         }
 
@@ -67,13 +67,13 @@ public class BankRewardService {
         return ResponseEntity.ok().build();
     }
 
-    public boolean hasEnoughPoints(Long bankId, int points) {
+    public boolean hasRewardLessPointsThanTotalBankPoints(Long bankId, int points) {
         List<Course> courses = courseService.findAllByBankId(bankId);
 
         int totalPoints = courses.stream()
                 .mapToInt(Course::getRewardPoints)
                 .sum();
 
-        return totalPoints >= points;
+        return points <= totalPoints;
     }
 }

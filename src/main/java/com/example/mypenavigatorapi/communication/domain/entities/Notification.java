@@ -21,6 +21,9 @@ public class Notification extends AuditModel {
     @Column(name = "notification_text")
     private String text;
 
+    @Column(name = "seen", columnDefinition = "boolean default false")
+    private boolean seen = false;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

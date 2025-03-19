@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SaveBankRewardDto {
-    private boolean active;
+    private boolean active = true;
 
     @NotNull
     @NotBlank
