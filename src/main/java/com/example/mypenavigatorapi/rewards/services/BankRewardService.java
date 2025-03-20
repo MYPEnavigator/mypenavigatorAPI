@@ -39,9 +39,7 @@ public class BankRewardService {
         Bank bank = bankService.findById(bankId);
         BankReward bankReward = Mapper.map(dto, BankReward.class);
 
-        if (!hasRewardLessPointsThanTotalBankPoints(bankId, bankReward.getRequiredPoints())) {
-            bankReward.setActive(false);
-        }
+        bankReward.setActive(hasRewardLessPointsThanTotalBankPoints(bankId, bankReward.getRequiredPoints()));
 
         bankReward.setBank(bank);
         return bankRewardRepository.save(bankReward);
@@ -50,12 +48,9 @@ public class BankRewardService {
     public BankReward update(Long id, SaveBankRewardDto dto) {
         BankReward bankReward = bankRewardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("BankReward", "id", id));
-
-        if (!hasRewardLessPointsThanTotalBankPoints(bankReward.getBank().getId(), bankReward.getRequiredPoints())) {
-            bankReward.setActive(false);
-        }
-
         Mapper.merge(dto, bankReward);
+        bankReward.setActive(hasRewardLessPointsThanTotalBankPoints(bankReward.getBank().getId(), bankReward.getRequiredPoints()));
+
         return bankRewardRepository.save(bankReward);
     }
 
