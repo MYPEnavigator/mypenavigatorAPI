@@ -20,6 +20,7 @@ public class SaveUserDto {
     private String lastName;
 
     private String profilePicture;
+    private Boolean isGoogleAccount = false;
 
     @NotNull
     @NotBlank

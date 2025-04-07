@@ -33,6 +33,9 @@ public class User extends AuditModel implements UserDetails {
     @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "is_google_account", columnDefinition = "boolean default false")
+    private boolean isGoogleAccount = false;
+
     @Column(name = "password")
     private String password;
 

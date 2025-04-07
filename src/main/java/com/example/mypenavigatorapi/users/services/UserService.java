@@ -97,6 +97,7 @@ public class UserService {
         user.setBank(bank);
         user.setMype(mype);
         user.setRole(role);
+        user.setGoogleAccount(dto.getIsGoogleAccount());
 
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 

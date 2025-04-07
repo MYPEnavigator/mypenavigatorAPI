@@ -2,6 +2,7 @@ package com.example.mypenavigatorapi.auth.controllers;
 
 import com.example.mypenavigatorapi.auth.domain.dto.AuthenticationLogin;
 import com.example.mypenavigatorapi.auth.domain.dto.AuthenticationResponse;
+import com.example.mypenavigatorapi.auth.domain.dto.GoogleAuthenticationLogin;
 import com.example.mypenavigatorapi.auth.services.AuthenticationService;
 import com.example.mypenavigatorapi.common.mapper.Mapper;
 import com.example.mypenavigatorapi.users.domain.entities.User;
@@ -23,13 +24,20 @@ public class AuthController {
     }
 
 
-
     @PostMapping("/login")
     @Operation(summary = "Login with credentials")
     public AuthenticationResponse login(
             @RequestBody AuthenticationLogin request
     ) {
         return authService.authenticate(Mapper.map(request, User.class));
+    }
+
+    @PostMapping("/login-with-google")
+    @Operation(summary = "Login with credentials")
+    public AuthenticationResponse loginWithGoogle(
+            @RequestBody GoogleAuthenticationLogin request
+    ) {
+        return authService.loginWithGoogle(request);
     }
 
 }

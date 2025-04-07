@@ -14,6 +14,7 @@ public class UserDto extends AuditDto {
     private String dni;
     private Role role;
     private String profilePicture;
+    private boolean isGoogleAccount = false;
     private String email;
     private MypeDto mype;
     private BankDto bank;
