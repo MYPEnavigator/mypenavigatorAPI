@@ -79,7 +79,7 @@ public class AuthenticationService {
         User user = userOpt.get();
 
         if (!user.isGoogleAccount()) {
-            throw new BadRequestException("El usuario no es una cuenta de Google");
+            throw new BadRequestException("El correo ya está registrado con otra cuenta");
         }
 
         String token = jwtService.generateToken(user);
