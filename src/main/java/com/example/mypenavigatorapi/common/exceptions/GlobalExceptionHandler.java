@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
-            errorDetail.setProperty("message", "El correo o la contraseña son incorrectos");
+            errorDetail.setProperty("message", "La contraseña es incorrecta");
             return errorDetail;
         }
 
