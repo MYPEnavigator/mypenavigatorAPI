@@ -66,6 +66,10 @@ public class UserService {
             throw new BadRequestException("El DNI ya está en uso");
         }
 
+        if(userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new BadRequestException("El correo ya está en uso");
+        }
+
 
         Role role = Role.admin;
 

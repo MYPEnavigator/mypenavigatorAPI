@@ -1,5 +1,6 @@
 package com.example.mypenavigatorapi.courses.domain.dto;
 
+import com.example.mypenavigatorapi.users.domain.dto.BankDto;
 import com.example.mypenavigatorapi.users.domain.dto.UserInfoDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class CourseInfoDto {
     private String managerName;
     private String signatureUrl;
     private String level;
+    private BankDto bank;
     private List<String> syllabus = new ArrayList<>();
     private UserInfoDto user;
 }
